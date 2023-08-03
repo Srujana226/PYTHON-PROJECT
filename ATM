@@ -1,0 +1,82 @@
+import tkinter as tk
+from tkinter import messagebox
+
+class ATM:
+    def _init_(self):
+        self.balance = 0
+
+    def display_balance(self):
+        messagebox.showinfo("Balance", f"Your balance is ${self.balance:.2f}")
+
+    def deposit(self, amount):
+        if amount <= 0:
+            messagebox.showwarning("Invalid Amount", "Invalid deposit amount.")
+            return
+        self.balance += amount
+        messagebox.showinfo("Deposit", f"${amount:.2f} has been deposited into your account.")
+        self.display_balance()
+
+    def withdraw(self, amount):
+        if amount <= 0:
+            messagebox.showwarning("Invalid Amount", "Invalid withdrawal amount.")
+            return
+        if amount > self.balance:
+            messagebox.showwarning("Insufficient Funds", "Insufficient funds.")
+            return
+        self.balance -= amount
+        messagebox.showinfo("Withdrawal", f"${amount:.2f} has been withdrawn from your account.")
+        self.display_balance()
+
+def deposit_clicked():
+    try:
+        amount = float(deposit_entry.get())
+        atm.deposit(amount)
+    except ValueError:
+        messagebox.showwarning("Invalid Amount", "Invalid amount. Please enter a valid number.")
+    deposit_entry.delete(0, tk.END)
+
+def withdraw_clicked():
+    try:
+        amount = float(withdraw_entry.get())
+        atm.withdraw(amount)
+    except ValueError:
+        messagebox.showwarning("Invalid Amount", "Invalid amount. Please enter a valid number.")
+    withdraw_entry.delete(0, tk.END)
+
+def display_balance_clicked():
+    atm.display_balance()
+
+atm = ATM()
+
+# GUI setup
+root = tk.Tk()
+root.title("ATM")
+
+frame = tk.Frame(root)
+frame.pack(padx=20, pady=20)
+
+deposit_label = tk.Label(frame, text="Enter Deposit Amount:")
+deposit_label.pack()
+
+deposit_entry = tk.Entry(frame)
+deposit_entry.pack()
+
+deposit_button = tk.Button(frame, text="Deposit", command=deposit_clicked)
+deposit_button.pack()
+
+withdraw_label = tk.Label(frame, text="Enter Withdrawal Amount:")
+withdraw_label.pack()
+
+withdraw_entry = tk.Entry(frame)
+withdraw_entry.pack()
+
+withdraw_button = tk.Button(frame, text="Withdraw", command=withdraw_clicked)
+withdraw_button.pack()
+
+balance_button = tk.Button(frame, text="Display Balance", command=display_balance_clicked)
+balance_button.pack()
+
+exit_button = tk.Button(frame, text="Exit", command=root.quit)
+exit_button.pack()
+
+root.mainloop()
